@@ -3,7 +3,7 @@ CREATE TABLE customers (
     customer_id BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL  CHECK (email = lower(email)),
     phone VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE login (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE restaurant (
+CREATE TABLE restaurants (
     restaurant_id BIGSERIAL PRIMARY KEY,
     restaurant_name VARCHAR(255) NOT NULL,
     restaurant_address VARCHAR(255) NOT NULL,
@@ -30,12 +30,12 @@ CREATE TABLE restaurant (
     restaurant_state VARCHAR(255) NOT NULL,
     restaurant_zip VARCHAR(255) NOT NULL,
     restaurant_phone VARCHAR(255) NOT NULL,
-    restaurant_email VARCHAR(255) NOT NULL,
+    restaurant_email VARCHAR(255) NOT NULL CHECK ( restaurant_email = lower(restaurant_email)),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE food_item (
+CREATE TABLE food_items (
     food_item_id BIGSERIAL PRIMARY KEY,
     food_item_name VARCHAR(255) NOT NULL,
     food_item_description VARCHAR(255) NOT NULL,
@@ -49,12 +49,12 @@ CREATE TABLE food_item (
     food_item_discount_end_date TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE restaurant_menu (
+CREATE TABLE restaurant_menus (
     restaurant_menu_id BIGSERIAL PRIMARY KEY,
     restaurant_id INTEGER NOT NULL,
     food_item_id INTEGER NOT NULL,
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id),
-    FOREIGN KEY (food_item_id) REFERENCES food_item(food_item_id)
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id),
+    FOREIGN KEY (food_item_id) REFERENCES food_items(food_item_id)
 );
 
 CREATE TABLE orders (
@@ -72,7 +72,7 @@ CREATE TABLE order_items (
     food_item_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (food_item_id) REFERENCES food_item(food_item_id)
+    FOREIGN KEY (food_item_id) REFERENCES food_items(food_item_id)
 );
 
 
@@ -82,11 +82,19 @@ CREATE TABLE cart (
     food_item_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-    FOREIGN KEY (food_item_id) REFERENCES food_item(food_item_id)
+    FOREIGN KEY (food_item_id) REFERENCES food_items(food_item_id)
 );
 
 
-
+CREATE TABLE card_details (
+    card_id BIGSERIAL PRIMARY KEY,
+    customer_id INTEGER NOT NULL,
+    card_number VARCHAR(255) NOT NULL,
+    card_name VARCHAR(255) NOT NULL,
+    card_expiration VARCHAR(255) NOT NULL,
+    card_cvv VARCHAR(255) NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
 
 CREATE TABLE payments (
     payment_id BIGSERIAL PRIMARY KEY,
@@ -102,17 +110,6 @@ CREATE TABLE payments (
 );
 
 
-CREATE TABLE card_details (
-    card_id BIGSERIAL PRIMARY KEY,
-    customer_id INTEGER NOT NULL,
-    card_number VARCHAR(255) NOT NULL,
-    card_name VARCHAR(255) NOT NULL,
-    card_expiration VARCHAR(255) NOT NULL,
-    card_cvv VARCHAR(255) NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
-);
-
-
 CREATE TABLE bills (
     bill_id BIGSERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL,
@@ -124,22 +121,22 @@ CREATE TABLE bills (
 );
 
 
-CREATE TABLE delivery (
+CREATE TABLE deliveries (
     delivery_id BIGSERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL,
     order_id INTEGER NOT NULL,
+    delivery_status BOOLEAN NOT NULL,
     delivery_date TIMESTAMP DEFAULT NOW(),
     delivery_address VARCHAR(255) NOT NULL,
     delivery_city VARCHAR(255) NOT NULL,
     delivery_state VARCHAR(255) NOT NULL,
     delivery_zip VARCHAR(255) NOT NULL,
-    delivery_country VARCHAR(255) NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
 
-CREATE TABLE delivery_person (
+CREATE TABLE delivery_persons (
     delivery_person_id BIGSERIAL PRIMARY KEY,
     delivery_person_name VARCHAR(255) NOT NULL,
     delivery_person_phone VARCHAR(255) NOT NULL,
@@ -159,12 +156,12 @@ CREATE TABLE reviews (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
-    FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id)
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id)
 );
 
 
 
-CREATE TABLE promocode (
+CREATE TABLE promocodes (
     promocode_id BIGSERIAL PRIMARY KEY,
     promocode VARCHAR(255) NOT NULL,
     promocode_discount INTEGER NOT NULL,
