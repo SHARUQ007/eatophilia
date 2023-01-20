@@ -3,8 +3,8 @@ CREATE TABLE customers (
     customer_id BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL  CHECK (email = lower(email)),
-    phone VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE CHECK (email = lower(email)),
+    phone VARCHAR(255) NOT NULL UNIQUE,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
@@ -16,8 +16,8 @@ CREATE TABLE customers (
 
 CREATE TABLE login (
     login_id BIGSERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL CHECK (email = lower(email)),
-    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE CHECK (email = lower(email)),
+    password VARCHAR(255) NOT NULL CHECK (password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+]).{8,}$'),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -29,8 +29,8 @@ CREATE TABLE restaurants (
     restaurant_city VARCHAR(255) NOT NULL,
     restaurant_state VARCHAR(255) NOT NULL,
     restaurant_zip VARCHAR(255) NOT NULL,
-    restaurant_phone VARCHAR(255) NOT NULL,
-    restaurant_email VARCHAR(255) NOT NULL CHECK ( restaurant_email = lower(restaurant_email)),
+    restaurant_phone VARCHAR(255) NOT NULL UNIQUE,
+    restaurant_email VARCHAR(255) NOT NULL UNIQUE  CHECK ( restaurant_email = lower(restaurant_email)),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -89,7 +89,7 @@ CREATE TABLE cart (
 CREATE TABLE card_details (
     card_id BIGSERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL,
-    card_number VARCHAR(255) NOT NULL,
+    card_number VARCHAR(255) NOT NULL UNIQUE,
     card_name VARCHAR(255) NOT NULL,
     card_expiration VARCHAR(255) NOT NULL,
     card_cvv VARCHAR(255) NOT NULL,
@@ -139,9 +139,9 @@ CREATE TABLE deliveries (
 CREATE TABLE delivery_persons (
     delivery_person_id BIGSERIAL PRIMARY KEY,
     delivery_person_name VARCHAR(255) NOT NULL,
-    delivery_person_phone VARCHAR(255) NOT NULL,
-    delivery_person_email VARCHAR(255) NOT NULL,
-    delivery_person_password VARCHAR(255) NOT NULL,
+    delivery_person_phone VARCHAR(255) NOT NULL UNIQUE,
+    delivery_person_email VARCHAR(255) NOT NULL UNIQUE CHECK ( delivery_person_email = lower(delivery_person_email)),
+    delivery_person_password VARCHAR(255) NOT NULL CHECK ( delivery_person_password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+]).{8,}$'),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
