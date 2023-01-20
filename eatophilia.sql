@@ -3,18 +3,15 @@ CREATE TABLE customers (
     customer_id BIGSERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE CHECK (email = lower(email)),
     phone VARCHAR(255) NOT NULL UNIQUE,
     address VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
-    zip VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    zip VARCHAR(255) NOT NULL
 );
 
 
-CREATE TABLE login (
+CREATE TABLE login_details (
     login_id BIGSERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE CHECK (email = lower(email)),
     password VARCHAR(255) NOT NULL CHECK (password ~ '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+]).{8,}$'),
@@ -45,8 +42,8 @@ CREATE TABLE food_items (
     food_item_quantity INTEGER NOT NULL,
     food_item_rating INTEGER NOT NULL,
     food_item_discount INTEGER NOT NULL,
-    food_item_discount_start_date TIMESTAMP DEFAULT NOW(),
-    food_item_discount_end_date TIMESTAMP DEFAULT NOW()
+    food_item_discount_start_date DATE,
+    food_item_discount_end_date DATE
 );
 
 CREATE TABLE restaurant_menus (
