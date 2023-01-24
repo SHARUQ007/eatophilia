@@ -23,6 +23,7 @@ CREATE TABLE customers (
 );
 
 CREATE INDEX idx_customers_name ON customers (customer_name);
+CREATE INDEX idx_email ON customers (email);
 
 CREATE TABLE restaurants (
     id BIGSERIAL PRIMARY KEY,
@@ -39,6 +40,8 @@ CREATE TABLE restaurants (
 
 
 CREATE INDEX idx_restaurants_name ON restaurants (restaurant_name);
+CREATE INDEX idx_email ON restaurants (email);
+CREATE INDEX idx_phone ON restaurants (phone);
 
 CREATE TABLE food_items (
     id BIGSERIAL PRIMARY KEY,
