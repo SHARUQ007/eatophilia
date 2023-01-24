@@ -40,8 +40,8 @@ CREATE TABLE restaurants (
 
 
 CREATE INDEX idx_restaurants_name ON restaurants (restaurant_name);
-CREATE INDEX idx_email ON restaurants (email);
-CREATE INDEX idx_phone ON restaurants (phone);
+CREATE INDEX idx_restaurant_email ON restaurants (email);
+CREATE INDEX idx_restaurant_phone ON restaurants (phone);
 
 CREATE TABLE food_items (
     id BIGSERIAL PRIMARY KEY,
